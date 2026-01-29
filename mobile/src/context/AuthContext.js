@@ -40,46 +40,21 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password) => {
     try {
       const response = await api.post('/api/auth/signup', { email, password });
-      return { success: true, data: response.data };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Signup failed' 
-      };
-    }
-  };
-
-  const verifyCode = async (email, code) => {
-    try {
-      const response = await api.post('/api/auth/verify', { email, code });
       const { access_token } = response.data;
-      
+
       await AsyncStorage.setItem('token', access_token);
-      
-      // Get user info
+
       const userResponse = await api.get('/api/auth/me');
       await AsyncStorage.setItem('user', JSON.stringify(userResponse.data));
-      
+
       setUser(userResponse.data);
       setIsAuthenticated(true);
-      
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Verification failed' 
-      };
-    }
-  };
 
-  const resendCode = async (email) => {
-    try {
-      await api.post('/api/auth/resend-code', { email });
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Failed to resend code' 
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Signup failed',
       };
     }
   };
@@ -122,8 +97,6 @@ export const AuthProvider = ({ children }) => {
         loading,
         isAuthenticated,
         signup,
-        verifyCode,
-        resendCode,
         login,
         logout,
       }}

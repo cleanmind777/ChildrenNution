@@ -1,8 +1,13 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text, Float, Enum as SQLEnum
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text, Float, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
 import enum
+
+
+def _enum_values(enum_class):
+    """Use enum values (e.g. 'male') in DB, not names (e.g. 'MALE')."""
+    return [e.value for e in enum_class]
 
 class MealType(str, enum.Enum):
     BREAKFAST = "breakfast"
@@ -40,7 +45,7 @@ class Child(Base):
     parent_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     name = Column(String, nullable=False)
     age = Column(Integer, nullable=False)
-    sex = Column(SQLEnum(Gender), nullable=False)
+    sex = Column(Enum(Gender, values_callable=_enum_values), nullable=False)
     food_allergies = Column(Text, nullable=True)  # JSON string or comma-separated
     dietary_restrictions = Column(Text, nullable=True)  # JSON string or comma-separated
     feeding_preferences = Column(Text, nullable=True)  # JSON string
@@ -56,7 +61,7 @@ class Meal(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     child_id = Column(Integer, ForeignKey("children.id"), nullable=False)
-    meal_type = Column(SQLEnum(MealType), nullable=False)
+    meal_type = Column(Enum(MealType, values_callable=_enum_values), nullable=False)
     food_image_url = Column(String, nullable=True)
     nutrition_data = Column(Text, nullable=True)  # JSON string
     food_category = Column(String, nullable=True)
@@ -70,7 +75,7 @@ class Activity(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     child_id = Column(Integer, ForeignKey("children.id"), nullable=False)
-    activity_type = Column(SQLEnum(ActivityType), nullable=False)
+    activity_type = Column(Enum(ActivityType, values_callable=_enum_values), nullable=False)
     quiz_id = Column(Integer, ForeignKey("quizzes.id"), nullable=True)
     video_id = Column(Integer, ForeignKey("videos.id"), nullable=True)
     completed_at = Column(DateTime(timezone=True), server_default=func.now())
