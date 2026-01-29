@@ -12,10 +12,13 @@ export const useAuth = () => {
   return context;
 };
 
+const ONBOARDING_COMPLETE_KEY = 'onboarding_complete';
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
 
   useEffect(() => {
     checkAuthStatus();
@@ -23,9 +26,14 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      const userData = await AsyncStorage.getItem('user');
-      
+      const [token, userData, onboardingComplete] = await Promise.all([
+        AsyncStorage.getItem('token'),
+        AsyncStorage.getItem('user'),
+        AsyncStorage.getItem(ONBOARDING_COMPLETE_KEY),
+      ]);
+
+      setHasCompletedOnboarding(onboardingComplete === 'true');
+
       if (token && userData) {
         setUser(JSON.parse(userData));
         setIsAuthenticated(true);
@@ -34,6 +42,15 @@ export const AuthProvider = ({ children }) => {
       console.error('Error checking auth status:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const completeOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem(ONBOARDING_COMPLETE_KEY, 'true');
+      setHasCompletedOnboarding(true);
+    } catch (error) {
+      console.error('Error saving onboarding state:', error);
     }
   };
 
@@ -88,6 +105,7 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
+    // Optionally keep onboarding state so returning users don't see it again
   };
 
   return (
@@ -96,6 +114,8 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         isAuthenticated,
+        hasCompletedOnboarding,
+        completeOnboarding,
         signup,
         login,
         logout,

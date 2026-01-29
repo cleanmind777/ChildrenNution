@@ -3,12 +3,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
+import OnboardingScreen from '../screens/onboarding/OnboardingScreen';
 import MainNavigator from './MainNavigator';
 
 const Stack = createNativeStackNavigator();
 
 export default function AuthNavigator() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, hasCompletedOnboarding } = useAuth();
+
+  if (!hasCompletedOnboarding) {
+    return <OnboardingScreen />;
+  }
 
   if (isAuthenticated) {
     return <MainNavigator />;
