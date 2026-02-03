@@ -66,7 +66,7 @@ export default function CoinsScreen() {
                 </Text>
               </View>
               <View style={styles.coinInfo}>
-                <MaterialCommunityIcons name="coin" size={32} color="#FFD700" />
+                <MaterialCommunityIcons name="cash" size={32} color="#FFD700" />
                 <Text variant="headlineMedium" style={styles.coinAmount}>
                   {balances[item.id] || 0}
                 </Text>

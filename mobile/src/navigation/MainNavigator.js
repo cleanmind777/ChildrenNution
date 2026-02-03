@@ -1,9 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useAuth } from '../context/AuthContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AuthNavigator from './AuthNavigator';
 
 // Screens
 import ChildrenListScreen from '../screens/children/ChildrenListScreen';
@@ -102,7 +100,7 @@ function MainTabs() {
         component={CoinsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="coin" size={size} color={color} />
+            <MaterialCommunityIcons name="cash" size={size} color={color} />
           ),
         }}
       />
@@ -120,12 +118,6 @@ function MainTabs() {
 }
 
 export default function MainNavigator() {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <AuthNavigator />;
-  }
-
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MainTabs" component={MainTabs} />

@@ -9,15 +9,12 @@ import { Text, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
+import OnboardingSlide1 from './OnboardingSlide1';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const SLIDES = [
-  {
-    icon: 'account-heart',
-    title: 'Welcome to Children Meals',
-    description: 'Track meals, encourage healthy eating, and earn rewards together with your kids.',
-  },
+  null, // first slide is custom OnboardingSlide1
   {
     icon: 'food-apple',
     title: 'Log Meals Easily',
@@ -39,7 +36,7 @@ const SLIDES = [
     description: 'Kids learn about food through fun activities and earn coins for completing them.',
   },
   {
-    icon: 'coin',
+    icon: 'cash',
     title: 'Coins & Rewards',
     description: 'Children earn coins for meals and activities. Use them to motivate healthy habits.',
   },
@@ -74,15 +71,17 @@ export default function OnboardingScreen() {
     completeOnboarding();
   };
 
-  const isLast = currentIndex === SLIDES.length - 1;
+  const isLast = currentIndex === SLIDES.length - 1; // 6 slides total (index 0..5)
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <View style={styles.skipRow}>
-        <Button mode="text" onPress={skip} compact textColor="#666">
-          Skip
-        </Button>
-      </View>
+      {currentIndex !== 0 && (
+        <View style={styles.skipRow}>
+          <Button mode="text" onPress={skip} compact textColor="#666">
+            Skip
+          </Button>
+        </View>
+      )}
 
       <ScrollView
         ref={scrollRef}
@@ -92,47 +91,44 @@ export default function OnboardingScreen() {
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
-        {SLIDES.map((slide, index) => (
-          <View key={index} style={[styles.slide, { width: SCREEN_WIDTH }]}>
-            <View style={styles.iconWrap}>
-              <MaterialCommunityIcons
-                name={slide.icon}
-                size={72}
-                color="#6200ee"
-              />
+        <View key={0} style={[styles.slide, styles.slide1, { width: SCREEN_WIDTH }]}>
+          <OnboardingSlide1 onContinue={goNext} />
+        </View>
+        {SLIDES.slice(1).map((slide, idx) => {
+          const index = idx + 1;
+          if (!slide) return null;
+          return (
+            <View key={index} style={[styles.slide, { width: SCREEN_WIDTH }]}>
+              <View style={styles.iconWrap}>
+                <MaterialCommunityIcons
+                  name={slide.icon}
+                  size={72}
+                  color="#6200ee"
+                />
+              </View>
+              <Text variant="headlineSmall" style={styles.title}>
+                {slide.title}
+              </Text>
+              <Text variant="bodyLarge" style={styles.description}>
+                {slide.description}
+              </Text>
             </View>
-            <Text variant="headlineSmall" style={styles.title}>
-              {slide.title}
-            </Text>
-            <Text variant="bodyLarge" style={styles.description}>
-              {slide.description}
-            </Text>
-          </View>
-        ))}
+          );
+        })}
       </ScrollView>
 
-      <View style={styles.dots}>
-        {SLIDES.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              index === currentIndex ? styles.dotActive : styles.dotInactive,
-            ]}
-          />
-        ))}
-      </View>
-
-      <View style={styles.footer}>
-        <Button
-          mode="contained"
-          onPress={goNext}
-          style={styles.button}
-          contentStyle={styles.buttonContent}
-        >
-          {isLast ? 'Get Started' : 'Next'}
-        </Button>
-      </View>
+      {currentIndex !== 0 && (
+        <View style={styles.footer}>
+          <Button
+            mode="contained"
+            onPress={goNext}
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+          >
+            {isLast ? 'Get Started' : 'Next'}
+          </Button>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -154,6 +150,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  slide1: {
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+  },
   iconWrap: {
     width: 120,
     height: 120,
@@ -173,25 +174,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#666',
     lineHeight: 24,
-  },
-  dots: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-    paddingVertical: 16,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  dotActive: {
-    backgroundColor: '#6200ee',
-    width: 24,
-  },
-  dotInactive: {
-    backgroundColor: '#ccc',
   },
   footer: {
     paddingHorizontal: 24,
