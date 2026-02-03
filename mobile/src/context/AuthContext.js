@@ -12,10 +12,13 @@ export const useAuth = () => {
   return context;
 };
 
+const ONBOARDING_COMPLETE_KEY = 'onboarding_complete';
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
 
   useEffect(() => {
     checkAuthStatus();
@@ -23,9 +26,14 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      const userData = await AsyncStorage.getItem('user');
-      
+      const [token, userData, onboardingComplete] = await Promise.all([
+        AsyncStorage.getItem('token'),
+        AsyncStorage.getItem('user'),
+        AsyncStorage.getItem(ONBOARDING_COMPLETE_KEY),
+      ]);
+
+      setHasCompletedOnboarding(onboardingComplete === 'true');
+
       if (token && userData) {
         setUser(JSON.parse(userData));
         setIsAuthenticated(true);
@@ -37,49 +45,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const completeOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem(ONBOARDING_COMPLETE_KEY, 'true');
+      setHasCompletedOnboarding(true);
+    } catch (error) {
+      console.error('Error saving onboarding state:', error);
+    }
+  };
+
   const signup = async (email, password) => {
     try {
       const response = await api.post('/api/auth/signup', { email, password });
-      return { success: true, data: response.data };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Signup failed' 
-      };
-    }
-  };
-
-  const verifyCode = async (email, code) => {
-    try {
-      const response = await api.post('/api/auth/verify', { email, code });
       const { access_token } = response.data;
-      
+
       await AsyncStorage.setItem('token', access_token);
-      
-      // Get user info
+
       const userResponse = await api.get('/api/auth/me');
       await AsyncStorage.setItem('user', JSON.stringify(userResponse.data));
-      
+
       setUser(userResponse.data);
       setIsAuthenticated(true);
-      
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Verification failed' 
-      };
-    }
-  };
 
-  const resendCode = async (email) => {
-    try {
-      await api.post('/api/auth/resend-code', { email });
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.detail || 'Failed to resend code' 
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Signup failed',
       };
     }
   };
@@ -113,6 +105,7 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
+    // Optionally keep onboarding state so returning users don't see it again
   };
 
   return (
@@ -121,9 +114,9 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         isAuthenticated,
+        hasCompletedOnboarding,
+        completeOnboarding,
         signup,
-        verifyCode,
-        resendCode,
         login,
         logout,
       }}

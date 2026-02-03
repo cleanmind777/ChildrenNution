@@ -1,12 +1,23 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = __DEV__ 
-  ? 'http://localhost:8000'  // Change to your backend URL
-  : 'https://your-production-api.com';
+// On Android emulator, localhost = emulator itself. Use 10.0.2.2 to reach host machine.
+function getApiBaseUrl() {
+  const url = process.env.EXPO_PUBLIC_API_URL || (__DEV__
+    ? 'http://localhost:8001'
+    : 'https://your-production-api.com');
+  if (Platform.OS === 'android' && (url.includes('localhost') || url.includes('127.0.0.1'))) {
+    return url.replace(/localhost|127\.0\.0\.1/, '10.0.2.2');
+  }
+  return url;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },

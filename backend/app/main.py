@@ -8,7 +8,12 @@ from app.routers import auth, children, meals, activities, coins, admin
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Children Meals API", version="1.0.0")
+app = FastAPI(
+    title="Children Meals API",
+    version="1.0.0",
+    docs_url="/docs",   # Swagger UI at http://localhost:8001/docs
+    redoc_url="/redoc",
+)
 
 # CORS middleware for React Native
 app.add_middleware(
@@ -34,7 +39,12 @@ app.include_router(admin.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Children Meals API", "version": "1.0.0"}
+    return {
+        "message": "Children Meals API",
+        "version": "1.0.0",
+        "docs": "http://localhost:8001/docs",
+        "redoc": "http://localhost:8001/redoc",
+    }
 
 @app.get("/health")
 async def health_check():

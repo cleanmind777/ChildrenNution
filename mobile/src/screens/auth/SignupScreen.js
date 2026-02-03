@@ -33,9 +33,9 @@ export default function SignupScreen() {
     setError('');
 
     const result = await signup(email, password);
-    
+
     if (result.success) {
-      navigation.navigate('Verification', { email });
+      // User is logged in; AuthNavigator will show Main
     } else {
       setError(result.error);
     }
