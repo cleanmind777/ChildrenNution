@@ -47,7 +47,7 @@ export default function OnboardingSlide1({ onContinue }) {
         <Img2at1onboarding></Img2at1onboarding>
       </View>
       <View style={styles.img3at1onboardingWrap}>
-        <Img3at1onboarding width={69} height={69} />
+        <Img3at1onboarding></Img3at1onboarding>
       </View>
       <View style={styles.img4at1onboardingWrap}>
         <Img4at1onboarding></Img4at1onboarding>
@@ -59,7 +59,7 @@ export default function OnboardingSlide1({ onContinue }) {
         <Img6at1onboarding></Img6at1onboarding>
       </View>
       <View style={styles.img7at1onboardingWrap}>
-        <Img7at1onboarding></Img7at1onboarding>
+        <Img6at1onboarding></Img6at1onboarding>
       </View>
       {/* <View style={styles.mainBox}>
         <View style={styles.videoWrap}>
