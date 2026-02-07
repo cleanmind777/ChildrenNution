@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import OnboardingSlide1 from './OnboardingSlide1';
+import OnboardingSlide2 from './OnboardingSide2';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -75,7 +76,7 @@ export default function OnboardingScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      {currentIndex !== 0 && (
+      {currentIndex >1 && (
         <View style={styles.skipRow}>
           <Button mode="text" onPress={skip} compact textColor="#666">
             Skip
@@ -94,7 +95,10 @@ export default function OnboardingScreen() {
         <View key={0} style={[styles.slide, styles.slide1, { width: SCREEN_WIDTH }]}>
           <OnboardingSlide1 onContinue={goNext} />
         </View>
-        {SLIDES.slice(1).map((slide, idx) => {
+        <View key={1} style={[styles.slide, styles.slide1, { width: SCREEN_WIDTH }]}>
+          <OnboardingSlide2 onContinue={goNext} />
+        </View>
+        {SLIDES.slice(2).map((slide, idx) => {
           const index = idx + 1;
           if (!slide) return null;
           return (
@@ -117,18 +121,7 @@ export default function OnboardingScreen() {
         })}
       </ScrollView>
 
-      {currentIndex !== 0 && (
-        <View style={styles.footer}>
-          <Button
-            mode="contained"
-            onPress={goNext}
-            style={styles.button}
-            contentStyle={styles.buttonContent}
-          >
-            {isLast ? 'Get Started' : 'Next'}
-          </Button>
-        </View>
-      )}
+      
     </SafeAreaView>
   );
 }
