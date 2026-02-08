@@ -34,9 +34,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.blue,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 34,
+    borderRadius:45,
     gap: 10,
   },
   buttonDisabled: {
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   label: {
     color: COLORS.white,
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   iconWrap: {
     width: 28,

@@ -1,87 +1,86 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import Bg1Svg from '../../../assets/pic/bg1_multiline.svg';
 import PlatefulSvg from '../../../assets/pic/Pl8ful.svg';
-import Img1at1onboarding from '../../../assets/pic/img1at1onboarding.svg';
-import Img2at1onboarding from '../../../assets/pic/img2at1onboarding.svg';
-import Img3at1onboarding from '../../../assets/pic/img3at1onboarding.svg';
-import Img4at1onboarding from '../../../assets/pic/img4at1onboarding.svg';
-import Img5at1onboarding from '../../../assets/pic/img5at1onboarding.svg';
-import Img6at1onboarding from '../../../assets/pic/img6at1onboarding.svg';
-import Img7at1onboarding from '../../../assets/pic/img7at1onboarding.svg';
-import { ContinueButton, VideoView } from './components';
+import ImgCup from '../../../assets/pic/Onbording/page1/img_cup.svg';
+import { Text } from 'react-native-paper';
+import { VideoView } from './components/VideoView';
+import { InfoBox } from './components/InfoBox';
+import { ContinueButton } from './components/ContinueButton';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const DESIGN_WIDTH = 440;
+const DESIGN_HEIGHT = 956;
 
-const ONBOARDING_VIDEO = require('../../../assets/onboard.mp4');
+const scaleX = SCREEN_WIDTH / DESIGN_WIDTH;
+const scaleY = SCREEN_HEIGHT / DESIGN_HEIGHT;
 
-const TEXT_BETWEEN_VIDEO_AND_CONTINUE = 'Helping little eaters explore food';
-
-const INFO_TEXT =
-  "If mealtimes feel stressful, you're not alone. Plateful helps turn everyday meals into calm, playful moments that encourage balanced eating — without pressure or bribing.";
-
-/**
- * First onboarding page: uses only bg1.svg as the visual, with a Continue button and info box.
- */
 export default function OnboardingSlide1({ onContinue }) {
   return (
     <View style={styles.container}>
+      {/* Background & Images - ALREADY RESPONSIVE */}
       <View style={styles.backgroundSvgWrap}>
-        <Bg1Svg
-          width={SCREEN_WIDTH}
-          height={SCREEN_HEIGHT}
-          style={[
-            styles.backgroundSvg
-          ]}
-          preserveAspectRatio="xMidYMid meet"
-        />
+        <Bg1Svg width={619 * scaleX} height={554 * scaleY} 
+          style={[styles.backgroundSvg, { top: -90 * scaleY, left: -60 * scaleX }]} />
       </View>
-      <View style={styles.platefulSvgWrap}>
-        <PlatefulSvg></PlatefulSvg>
+      <View style={styles.backpicSvgWrap}>
+        <PlatefulSvg width={89 * scaleX} height={31 * scaleY} 
+          style={[styles.backgroundSvg, { top: 40 * scaleY, left: 31 * scaleX }]} />
+        <ImgCup width={80 * scaleX} height={72 * scaleY} 
+          style={[styles.backgroundSvg, { top: 40 * scaleY, left: 332 * scaleX }]} />
+        
+        {/* PNG Images - ALREADY RESPONSIVE */}
+        <Image source={require('../../../assets/pic/Onbording/page1/book.png')}
+          style={{ width: 69 * scaleX, height: 69 * scaleY, position: 'absolute', top: 162 * scaleY, left: 35 * scaleX }}
+          resizeMode="contain" />
+        <Image source={require('../../../assets/pic/Onbording/page1/circle.png')}
+          style={{ width: 51 * scaleX, height: 51 * scaleY, position: 'absolute', top: 215 * scaleY, left: 385 * scaleX }}
+          resizeMode="contain" />
+        <Image source={require('../../../assets/pic/Onbording/page1/heart.png')}
+          style={{ width: 90 * scaleX, height: 89 * scaleY, position: 'absolute', top: 120 * scaleY, left: 183 * scaleX }}
+          resizeMode="contain" />
+        <Image source={require('../../../assets/pic/Onbording/page1/rocket.png')}
+          style={{ width: 54 * scaleX, height: 60 * scaleY, position: 'absolute', top: 664 * scaleY, left: 0 }}
+          resizeMode="contain" />
+        <Image source={require('../../../assets/pic/Onbording/page1/line.png')}
+          style={{ width: 55 * scaleX, height: 74 * scaleY, position: 'absolute', top: 478 * scaleY, left: 108 * scaleX }}
+          resizeMode="contain" />
+        <Image source={require('../../../assets/pic/Onbording/page1/sun.png')}
+          style={{ width: 50 * scaleX, height: 50 * scaleY, position: 'absolute', top: 489 * scaleY, left: 345 * scaleX }}
+          resizeMode="contain" />
       </View>
-      <View style={styles.img1at1onboardingWrap}>
-        <Img1at1onboarding></Img1at1onboarding>
-      </View>
-      <View style={styles.img2at1onboardingWrap}>
-        <Img2at1onboarding></Img2at1onboarding>
-      </View>
-      <View style={styles.img3at1onboardingWrap}>
-        <Img3at1onboarding></Img3at1onboarding>
-      </View>
-      <View style={styles.img4at1onboardingWrap}>
-        <Img4at1onboarding></Img4at1onboarding>
-      </View>
-      <View style={styles.img5at1onboardingWrap}>
-        <Img5at1onboarding></Img5at1onboarding>
-      </View>
-      <View style={styles.img6at1onboardingWrap}>
-        <Img6at1onboarding></Img6at1onboarding>
-      </View>
-      <View style={styles.img7at1onboardingWrap}>
-        <Img6at1onboarding></Img6at1onboarding>
-      </View>
-      {/* <View style={styles.mainBox}>
-        <View style={styles.videoWrap}>
-          <VideoView videoSource={ONBOARDING_VIDEO} placeholderStyle={styles.videoPlaceholder} />
-        </View>
-        <View style={styles.shortLine}>
-        </View>
-        <View style={styles.textBetweenWrap}>
-          <Text style={styles.textBetween}>{TEXT_BETWEEN_VIDEO_AND_CONTINUE}</Text>
-        </View>
-        <View style={styles.continueWrap}>
-          <ContinueButton
-            onPress={onContinue}
-            label="Continue"
-            style={styles.continueButton}
+
+      {/* CONTENT - NOW RESPONSIVE */}
+      <View style={[styles.contentWrap, { marginTop: 266 * scaleY, paddingHorizontal: 38 * scaleX }]}>
+        <View style={[styles.videoContainer, { width: 359 * scaleX, height: 196 * scaleY }]}>
+          <VideoView
+            videoSource={require('../../../assets/pic/Onbording/page1/onboard.mp4')}
+            placeholderStyle={styles.placeholderStyle}
           />
         </View>
-        <View style={styles.infoBox}>
-          <Text style={styles.infoText}>{INFO_TEXT}</Text>
+        
+        <View style={[styles.textContainer, { marginTop: 93 * scaleY, marginBottom: 20 * scaleY }]}>
+          <View style={[styles.squre, { width: 30 * scaleX, height: 5 * scaleY }]} />
+          <Text style={[styles.description, { 
+            fontSize: 16 * Math.min(scaleX, scaleY), 
+            marginTop: 14 * scaleY,
+            lineHeight: 41 * Math.min(scaleX, scaleY) 
+          }]}>
+            Helping little eaters explore food
+          </Text>
         </View>
-      </View> */}
 
+        <ContinueButton
+          onPress={onContinue}
+          label="Continue"
+          style={[styles.continueButton, { marginHorizontal: 9 * scaleX }]}
+        />
+
+        <InfoBox
+          text="If mealtimes feel stressful, you're not alone. Plateful helps turn everyday meals into calm, playful moments that encourage balanced eating — without pressure or bribing."
+          style={[styles.infoBox, { marginTop: 44 * scaleY, marginHorizontal: 9 * scaleX }]}
+        />
+      </View>
     </View>
   );
 }
@@ -89,128 +88,42 @@ export default function OnboardingSlide1({ onContinue }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#faf9f7',
+    flex: 1,
   },
   backgroundSvgWrap: {
-    ...StyleSheet.absoluteFillObject,  // Full screen absolute
+    ...StyleSheet.absoluteFillObject,
     zIndex: -10,
+  },
+  backpicSvgWrap: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'visible',
+    zIndex: -5,
   },
   backgroundSvg: {
     position: 'absolute',
   },
-  svgWrap: {
-    zIndex: -10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  videoWrap: {
-    position: 'absolute',
-    left: 44,
-    top: 266,
-  },
-  videoPlaceholder: {
-    width: 359,
-    height: 196,
-    borderRadius: 10,
-    opacity: 1,
-  },
-  textBetweenWrap: {
-    position: 'absolute',
-    left: 44,
-    right: 44,
-    top: 478,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textBetween: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1f2937',
-    textAlign: 'center',
-  },
-  continueWrap: {
-    position: 'absolute',
-    left: 124,
-    top: 619,
-    paddingHorizontal: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
-  },
-  continueButton: {
-    width: 193.739013671875,
-    height: 57.44021224975586,
-    opacity: 1,
-  },
-  infoBox: {
-    position: 'absolute',
-    left: 47,
-    top: 721,
-    width: 347,
-    height: 170,
-    borderRadius: 11.68,
-    opacity: 1,
-    backgroundColor: '#FF9F3F',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    justifyContent: 'center',
-  },
-  infoText: {
-    color: '#fff',
-    fontSize: 15,
-    lineHeight: 22,
-    textAlign: 'center',
-  },
-  mainBox: {
+  contentWrap: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
-  shortLine: {
-    position: 'absolute',
-    width: 30.18,
-    height: 4.87,
-    borderRadius: 52.57,
-    opacity: 1,
-    top: 555,
-    left: 205.59,
+  placeholderStyle: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#D9D9D9',
+  },
+  videoContainer: {},
+  textContainer: {
+    alignItems: 'center',
+  },
+  squre: {
+    borderRadius: 50,
     backgroundColor: '#F68B1F',
   },
-  platefulSvgWrap:{
-    position: 'absolute',
-    top: 40,
-    left: 31
+  description: {
+    fontWeight: '400',
+    color: '#000000',
+    textAlign: 'center',
   },
-  img1at1onboardingWrap:{
-    position: 'absolute',
-    top: 40,
-    right: 1
-  },
-  img2at1onboardingWrap:{
-    position: 'absolute',
-    top: 120,
-    left: 183
-  },
-  img3at1onboardingWrap:{
-    position: 'absolute',
-    top: 120,
-    left: 35,
-  },
-  img4at1onboardingWrap:{
-    position: 'absolute',
-    top: 250,
-    left: 332
-  },
-  img5at1onboardingWrap:{
-    position: 'absolute',
-    top: 478,
-    left: 108
-  },
-  img6at1onboardingWrap:{
-    position: 'absolute',
-    top: 489,
-    left: 345
-  },
-  img7at1onboardingWrap:{
-    position: 'absolute',
-    bottom: 231,
-  }
+  infoBox: {},
+  continueButton: {},
 });

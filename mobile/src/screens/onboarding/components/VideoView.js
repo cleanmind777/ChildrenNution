@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, TouchableOpacity, StyleSheet, Modal, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,15 +9,17 @@ const COLORS = {
   grey: '#e5e7eb',
 };
 
-/**
- * VideoView - Large video placeholder with blue circular play button.
- * Tapping opens a modal to play the video.
- */
 export function VideoView({ videoSource = null, placeholderStyle }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const videoRef = useRef(null);
 
   const openVideo = () => setModalVisible(true);
-  const closeVideo = () => setModalVisible(false);
+  const closeVideo = () => {
+    setModalVisible(false);
+    if (videoRef.current) {
+      videoRef.current.pauseAsync();
+    }
+  };
 
   return (
     <>
@@ -35,23 +37,28 @@ export function VideoView({ videoSource = null, placeholderStyle }) {
         visible={modalVisible}
         animationType="slide"
         onRequestClose={closeVideo}
+        statusBarTranslucent={true}
       >
         <View style={styles.modalContainer}>
-          <Button mode="text" onPress={closeVideo} style={styles.closeButton}>
-            Close
-          </Button>
+          <TouchableOpacity style={styles.closeButton} onPress={closeVideo}>
+            <MaterialCommunityIcons name="close" size={32} color="#fff" />
+          </TouchableOpacity>
+          
           {videoSource ? (
             <Video
+              ref={videoRef}
               source={videoSource}
-              useNativeControls
-              resizeMode="contain"
               style={styles.video}
-              onPlaybackStatusUpdate={() => {}}
+              resizeMode="contain"
+              useNativeControls={false}  // ❌ REMOVED - causes fullscreen
+              shouldPlay
+              isLooping
+              onError={(error) => console.log('Video error:', error)}
             />
           ) : (
             <View style={styles.placeholderModal}>
               <MaterialCommunityIcons name="video-outline" size={64} color="#999" />
-              <Button mode="contained" onPress={closeVideo} style={styles.closeBtn}>
+              <Button mode="contained" onPress={closeVideo}>
                 Close
               </Button>
             </View>
@@ -83,24 +90,28 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: '#000',
-    paddingTop: 60,
-    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   closeButton: {
-    alignSelf: 'flex-end',
-    marginBottom: 16,
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 100,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 20,
+    padding: 8,
   },
   video: {
-    flex: 1,
-    width: '100%',
+    width: '95%',
+    height: '80%',
+    backgroundColor: '#000',
   },
   placeholderModal: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
-  },
-  closeBtn: {
-    marginTop: 16,
+    paddingHorizontal: 20,
   },
 });

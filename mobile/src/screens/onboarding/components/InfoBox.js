@@ -21,14 +21,16 @@ export function InfoBox({ text, style }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.orange,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    paddingVertical: 28,
+    paddingHorizontal: 22,
     borderRadius: 12,
   },
   text: {
     color: COLORS.white,
-    fontSize: 15,
-    lineHeight: 22,
-    textAlign: 'left',
+    fontWeight: 450,
+    fontStyle: 'medium',
+    fontSize: 19,
+    lineHeight: '100%',
+    textAlign: 'center',
   },
 });
