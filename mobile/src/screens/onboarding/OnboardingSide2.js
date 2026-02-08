@@ -1,10 +1,10 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { Text } from "react-native-paper";
-import PicSvg from "../../../assets/pic/onb1_pic.svg";
-import Bg1Svg from "../../../assets/pic/onb1_multicircles.svg";
-import Bg2Svg from "../../../assets/pic/onb1_rectangle.svg";
-import { ContinueButton } from "./components";
+import PicSvg from "../../../assets/pic/Onbording/page2/onb1_pic.svg";
+import Bg1Svg from "../../../assets/pic/Onbording/multicircles.svg";
+import Bg2Svg from "../../../assets/pic/Onbording/page2/onb1_rectangle.svg";
+import { ContinueButton1 } from "./components/ContinueButton1";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 // Responsive offsets based on screen size (proportional to 440x956 base)
@@ -42,7 +42,7 @@ export default function OnboardingSlide2({ onContinue }) {
                 
             </View>
             <View style={{ position: 'absolute', bottom: -5, width: '100%', alignItems: 'center' }}>
-                    <ContinueButton onPress={onContinue} label="Continue" />
+                    <ContinueButton1 onPress={onContinue} label="Continue" />
                 </View>
         </View>
 
