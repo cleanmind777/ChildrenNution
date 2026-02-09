@@ -45,7 +45,8 @@
         {
           "photosPermission": "Allow Children Meals to access your photos to select food images."
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }
