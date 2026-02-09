@@ -10,38 +10,41 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import OnboardingSlide1 from './OnboardingSlide1';
-import OnboardingSlide2 from './OnboardingSide2';
+import OnboardingSlide from './OnboardingSide';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const SLIDES = [
-  null, // first slide is custom OnboardingSlide1
+// Content for slides 1–3: same format (image + bottom card with title/description), different content
+const CONTENT_SLIDES = [
   {
-    icon: 'food-apple',
-    title: 'Log Meals Easily',
-    description: 'Snap a photo or pick from categories. We help you record breakfast, lunch, dinner, and snacks.',
+    imageSource: require('../../../assets/pic/Onbording/slide/img_slide1.png'),
+    title: 'Guidance when it matters most',
+    description: 'Plateful works alongside your child during meals — offering gentle reminders, encouragement, and praise that support healthier choices in real time.',
   },
   {
-    icon: 'account-multiple',
-    title: 'Profiles for Each Child',
-    description: 'Add your children with ages and preferences. We personalize tips and nutrition for each one.',
+    imageSource: require('../../../assets/pic/Onbording/slide/img_slide2.png'),
+    title: 'Small wins. Real progress.',
+    description: 'With gentle guidance and encouragement, kids build confidence around food — and healthy habits grow over time.',
   },
   {
-    icon: 'chart-box',
-    title: 'Nutrition at a Glance',
-    description: 'See simple nutrition insights and food categories so you can balance meals over time.',
+    imageSource: require('../../../assets/pic/Onbording/slide/img_slide3.png'),
+    title: 'More than an app.',
+    description: 'Plateful combines short learning modules before meals with a smart plate that supports kids during meals — together building healthy eating habits.',
   },
   {
-    icon: 'gamepad-variant',
-    title: 'Quizzes & Videos',
-    description: 'Kids learn about food through fun activities and earn coins for completing them.',
+    imageSource: require('../../../assets/pic/Onbording/slide/img_slide4.png'),
+    title: 'Built for growing kids',
+    description: 'Designed for young children, Plateful meets kids where they are — encouraging exploration, balance, and confidence around food from an early age.',
   },
   {
-    icon: 'cash',
-    title: 'Coins & Rewards',
-    description: 'Children earn coins for meals and activities. Use them to motivate healthy habits.',
+    imageSource: require('../../../assets/pic/Onbording/slide/img_slide5.png'),
+    title: 'Lorem ipsum doller',
+    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
   },
 ];
+
+
+const TOTAL_SLIDES = 1 + CONTENT_SLIDES.length ; // slide0 + content slides + icon slides
 
 export default function OnboardingScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,13 +54,13 @@ export default function OnboardingScreen() {
   const onScroll = (e) => {
     const offsetX = e.nativeEvent.contentOffset.x;
     const index = Math.round(offsetX / SCREEN_WIDTH);
-    if (index !== currentIndex && index >= 0 && index < SLIDES.length) {
+    if (index !== currentIndex && index >= 0 && index < TOTAL_SLIDES) {
       setCurrentIndex(index);
     }
   };
 
   const goNext = () => {
-    if (currentIndex < SLIDES.length - 1) {
+    if (currentIndex < TOTAL_SLIDES - 1) {
       scrollRef.current?.scrollTo({
         x: (currentIndex + 1) * SCREEN_WIDTH,
         animated: true,
@@ -72,17 +75,10 @@ export default function OnboardingScreen() {
     completeOnboarding();
   };
 
-  const isLast = currentIndex === SLIDES.length - 1; // 6 slides total (index 0..5)
+  const isLast = currentIndex === TOTAL_SLIDES - 1;
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      {currentIndex >1 && (
-        <View style={styles.skipRow}>
-          <Button mode="text" onPress={skip} compact textColor="#666">
-            Skip
-          </Button>
-        </View>
-      )}
 
       <ScrollView
         ref={scrollRef}
@@ -95,30 +91,17 @@ export default function OnboardingScreen() {
         <View key={0} style={[styles.slide, styles.slide1, { width: SCREEN_WIDTH }]}>
           <OnboardingSlide1 onContinue={goNext} />
         </View>
-        <View key={1} style={[styles.slide, styles.slide1, { width: SCREEN_WIDTH }]}>
-          <OnboardingSlide2 onContinue={goNext} />
-        </View>
-        {SLIDES.slice(2).map((slide, idx) => {
-          const index = idx + 1;
-          if (!slide) return null;
-          return (
-            <View key={index} style={[styles.slide, { width: SCREEN_WIDTH }]}>
-              <View style={styles.iconWrap}>
-                <MaterialCommunityIcons
-                  name={slide.icon}
-                  size={72}
-                  color="#6200ee"
-                />
-              </View>
-              <Text variant="headlineSmall" style={styles.title}>
-                {slide.title}
-              </Text>
-              <Text variant="bodyLarge" style={styles.description}>
-                {slide.description}
-              </Text>
-            </View>
-          );
-        })}
+        {CONTENT_SLIDES.map((content, idx) => (
+          <View key={idx + 1} style={[styles.slide, styles.slide1, { width: SCREEN_WIDTH }]}>
+            <OnboardingSlide
+              onContinue={goNext}
+              imageSource={content.imageSource}
+              title={content.title}
+              description={content.description}
+            />
+          </View>
+        ))}
+     
       </ScrollView>
 
       
@@ -148,34 +131,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
   },
-  iconWrap: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#f0e6ff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  title: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: 12,
-    paddingHorizontal: 8,
-  },
-  description: {
-    textAlign: 'center',
-    color: '#666',
-    lineHeight: 24,
-  },
-  footer: {
-    paddingHorizontal: 24,
-    paddingBottom: 24,
-  },
-  button: {
-    borderRadius: 12,
-  },
-  buttonContent: {
-    paddingVertical: 6,
-  },
+ 
 });
