@@ -22,7 +22,7 @@ const scaleY = SCREEN_HEIGHT / DESIGN_HEIGHT;
 
 // Login card (and IMG_RECTANGLE) size for design 440×956
 const CARD_WIDTH = 407 * scaleX;
-const CARD_HEIGHT = 472;
+const CARD_HEIGHT = 499;
 const CARD_MARGIN_H = ((DESIGN_WIDTH - 407) / 2) * scaleX;
 
 // Character image positioning for design 440×956
@@ -53,7 +53,7 @@ const COLORS = {
 // Assets from /assets/pic/auth/login
 const IMG_CIRCLES = require('../../../assets/pic/auth/login/circles.png');
 const IMG_CHARACTER = require('../../../assets/pic/auth/login/character.png');
-const IMG_RECTANGLE = require('../../../assets/pic/auth/login/ractangle.png');
+const IMG_RECTANGLE = require('../../../assets/pic/auth/login/rectangle.png');
 const IMG_GOOGLE = require('../../../assets/pic/auth/google.png');
 const IMG_APPLE = require('../../../assets/pic/auth/apple.png');
 
@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
     paddingTop: 28,
     paddingBottom: 20,
     borderRadius: 24,
+    gap: 5,
   },
   cardTitle: {
     fontFamily: 'Futura PT',
-    fontStyle: 'demi',
-    fontWeight: '500',
     fontSize: 46.68,
     lineHeight: 46.68,
     letterSpacing: 0,
+    textAlign: 'left',
     color: COLORS.white,
     marginBottom: 20,
   },
@@ -262,16 +262,15 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   signUpText: {
+    fontFamily: 'Futura PT',
     color: COLORS.textLight,
     fontSize: 18.68,
-    fontWeight: '450',
-    fontStyle: 'medium',
   },
   signUpLink: {
+    fontFamily: 'Futura PT',
     color: COLORS.white,
     fontSize: 18.68,
-    fontWeight: '450',
-    fontStyle: 'medium',
+    fontWeight: '600',
   },
   socialRow: {
     flexDirection: 'row',
