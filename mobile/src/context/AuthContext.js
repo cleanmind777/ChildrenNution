@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [justSignedUp, setJustSignedUp] = useState(false);
 
   useEffect(() => {
     checkAuthStatus();
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
 
       setUser(userResponse.data);
       setIsAuthenticated(true);
+      setJustSignedUp(true);
 
       return { success: true };
     } catch (error) {
@@ -105,6 +107,7 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
+    setJustSignedUp(false);
     // Optionally keep onboarding state so returning users don't see it again
   };
 
@@ -115,7 +118,9 @@ export const AuthProvider = ({ children }) => {
         loading,
         isAuthenticated,
         hasCompletedOnboarding,
+        justSignedUp,
         completeOnboarding,
+        setJustSignedUp,
         signup,
         login,
         logout,
