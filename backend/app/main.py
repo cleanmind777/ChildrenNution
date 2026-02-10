@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from app.database import engine, Base
-from app.routers import auth, children, meals, activities, coins, admin
+from app.routers import auth, children, meals, activities, coins, admin, food_allergy_options
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -36,6 +36,7 @@ app.include_router(meals.router)
 app.include_router(activities.router)
 app.include_router(coins.router)
 app.include_router(admin.router)
+app.include_router(food_allergy_options.router)
 
 @app.get("/")
 async def root():

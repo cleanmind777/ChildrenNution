@@ -49,11 +49,20 @@ CREATE TABLE IF NOT EXISTS children (
   food_allergies TEXT,
   dietary_restrictions TEXT,
   feeding_preferences TEXT,
+  medical_notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 
 CREATE INDEX IF NOT EXISTS ix_children_id ON children (id);
 CREATE INDEX IF NOT EXISTS ix_children_parent_id ON children (parent_id);
+
+-- Table: food_allergy_options (admin-managed list for add-child flow)
+CREATE TABLE IF NOT EXISTS food_allergy_options (
+  id SERIAL PRIMARY KEY,
+  label VARCHAR(255) NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS ix_food_allergy_options_id ON food_allergy_options (id);
 
 -- Table: quizzes
 CREATE TABLE IF NOT EXISTS quizzes (

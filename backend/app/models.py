@@ -49,6 +49,7 @@ class Child(Base):
     food_allergies = Column(Text, nullable=True)  # JSON string or comma-separated
     dietary_restrictions = Column(Text, nullable=True)  # JSON string or comma-separated
     feeding_preferences = Column(Text, nullable=True)  # JSON string
+    medical_notes = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     parent = relationship("User", back_populates="children")
@@ -109,6 +110,14 @@ class Video(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     activities = relationship("Activity", back_populates="video")
+
+class FoodAllergyOption(Base):
+    """Admin-managed list of food allergy options shown to all users when adding a child."""
+    __tablename__ = "food_allergy_options"
+
+    id = Column(Integer, primary_key=True, index=True)
+    label = Column(String(255), nullable=False)
+    sort_order = Column(Integer, nullable=False, default=0)
 
 class Coin(Base):
     __tablename__ = "coins"

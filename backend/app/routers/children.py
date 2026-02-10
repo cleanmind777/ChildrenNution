@@ -15,7 +15,7 @@ async def create_child(
     """Create a new child profile"""
     db_child = models.Child(
         parent_id=current_user.id,
-        **child.dict()
+        **child.model_dump()
     )
     db.add(db_child)
     db.commit()
@@ -70,7 +70,7 @@ async def update_child(
             detail="Child not found"
         )
     
-    update_data = child_update.dict(exclude_unset=True)
+    update_data = child_update.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(child, field, value)
     

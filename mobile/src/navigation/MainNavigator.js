@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 // Screens
 import ChildrenListScreen from '../screens/children/ChildrenListScreen';
 import ChildProfileScreen from '../screens/children/ChildProfileScreen';
-import AddChildScreen from '../screens/children/AddChildScreen';
+import AddChildFlowWrapper from './AddChildFlowWrapper';
 import MealSelectionScreen from '../screens/meals/MealSelectionScreen';
 import ActivityScreen from '../screens/activities/ActivityScreen';
 import QuizScreen from '../screens/activities/QuizScreen';
@@ -35,8 +35,8 @@ function ChildrenStack() {
       />
       <Stack.Screen 
         name="AddChild" 
-        component={AddChildScreen}
-        options={{ title: 'Add Child' }}
+        component={AddChildFlowWrapper}
+        options={{ title: 'Add Child', headerShown: false }}
       />
       <Stack.Screen 
         name="MealSelection" 

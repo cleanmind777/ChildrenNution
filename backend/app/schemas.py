@@ -36,6 +36,7 @@ class ChildCreate(BaseModel):
     food_allergies: Optional[str] = None
     dietary_restrictions: Optional[str] = None
     feeding_preferences: Optional[str] = None
+    medical_notes: Optional[str] = None
 
 class ChildUpdate(BaseModel):
     name: Optional[str] = None
@@ -44,6 +45,7 @@ class ChildUpdate(BaseModel):
     food_allergies: Optional[str] = None
     dietary_restrictions: Optional[str] = None
     feeding_preferences: Optional[str] = None
+    medical_notes: Optional[str] = None
 
 class ChildResponse(BaseModel):
     id: int
@@ -54,6 +56,7 @@ class ChildResponse(BaseModel):
     food_allergies: Optional[str]
     dietary_restrictions: Optional[str]
     feeding_preferences: Optional[str]
+    medical_notes: Optional[str]
     created_at: datetime
     
     class Config:
@@ -153,6 +156,23 @@ class NutritionAnalysisResponse(BaseModel):
     vitamins: Optional[dict]
     allergens_detected: List[str]
     recommendations: Optional[str]
+
+# Food Allergy Options (admin-managed list for add-child flow)
+class FoodAllergyOptionResponse(BaseModel):
+    id: int
+    label: str
+    sort_order: int
+
+    class Config:
+        from_attributes = True
+
+class FoodAllergyOptionCreate(BaseModel):
+    label: str
+    sort_order: Optional[int] = 0
+
+class FoodAllergyOptionUpdate(BaseModel):
+    label: Optional[str] = None
+    sort_order: Optional[int] = None
 
 # Token Schema
 class Token(BaseModel):
