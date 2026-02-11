@@ -64,6 +64,22 @@ CREATE TABLE IF NOT EXISTS food_allergy_options (
 );
 CREATE INDEX IF NOT EXISTS ix_food_allergy_options_id ON food_allergy_options (id);
 
+-- Table: dietary_restriction_options (admin-managed list for add-child flow)
+CREATE TABLE IF NOT EXISTS dietary_restriction_options (
+  id SERIAL PRIMARY KEY,
+  label VARCHAR(255) NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS ix_dietary_restriction_options_id ON dietary_restriction_options (id);
+
+-- Table: feeding_preference_options (admin-managed list for add-child flow)
+CREATE TABLE IF NOT EXISTS feeding_preference_options (
+  id SERIAL PRIMARY KEY,
+  label VARCHAR(255) NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS ix_feeding_preference_options_id ON feeding_preference_options (id);
+
 -- Table: quizzes
 CREATE TABLE IF NOT EXISTS quizzes (
   id SERIAL PRIMARY KEY,

@@ -119,6 +119,22 @@ class FoodAllergyOption(Base):
     label = Column(String(255), nullable=False)
     sort_order = Column(Integer, nullable=False, default=0)
 
+class DietaryRestrictionOption(Base):
+    """Admin-managed list of dietary restriction options for the add-child flow."""
+    __tablename__ = "dietary_restriction_options"
+
+    id = Column(Integer, primary_key=True, index=True)
+    label = Column(String(255), nullable=False)
+    sort_order = Column(Integer, nullable=False, default=0)
+
+class FeedingPreferenceOption(Base):
+    """Admin-managed list of feeding preference options for the add-child flow."""
+    __tablename__ = "feeding_preference_options"
+
+    id = Column(Integer, primary_key=True, index=True)
+    label = Column(String(255), nullable=False)
+    sort_order = Column(Integer, nullable=False, default=0)
+
 class Coin(Base):
     __tablename__ = "coins"
     

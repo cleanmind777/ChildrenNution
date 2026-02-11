@@ -70,6 +70,132 @@ async def admin_delete_food_allergy_option(
     db.commit()
     return {"message": "Deleted"}
 
+
+# ---------- Dietary restriction options (admin-managed list for add-child flow) ----------
+@router.get("/dietary-restriction-options", response_model=List[schemas.DietaryRestrictionOptionResponse])
+async def admin_list_dietary_restriction_options(
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """List all dietary restriction options (admin)."""
+    return (
+        db.query(models.DietaryRestrictionOption)
+        .order_by(models.DietaryRestrictionOption.sort_order.asc(), models.DietaryRestrictionOption.id.asc())
+        .all()
+    )
+
+
+@router.post("/dietary-restriction-options", response_model=schemas.DietaryRestrictionOptionResponse)
+async def admin_create_dietary_restriction_option(
+    payload: schemas.DietaryRestrictionOptionCreate,
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Add a new dietary restriction option (admin)."""
+    opt = models.DietaryRestrictionOption(label=payload.label, sort_order=payload.sort_order or 0)
+    db.add(opt)
+    db.commit()
+    db.refresh(opt)
+    return opt
+
+
+@router.put("/dietary-restriction-options/{option_id}", response_model=schemas.DietaryRestrictionOptionResponse)
+async def admin_update_dietary_restriction_option(
+    option_id: int,
+    payload: schemas.DietaryRestrictionOptionUpdate,
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Update a dietary restriction option (admin)."""
+    opt = db.query(models.DietaryRestrictionOption).filter(models.DietaryRestrictionOption.id == option_id).first()
+    if not opt:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Option not found")
+    if payload.label is not None:
+        opt.label = payload.label
+    if payload.sort_order is not None:
+        opt.sort_order = payload.sort_order
+    db.commit()
+    db.refresh(opt)
+    return opt
+
+
+@router.delete("/dietary-restriction-options/{option_id}")
+async def admin_delete_dietary_restriction_option(
+    option_id: int,
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Delete a dietary restriction option (admin)."""
+    opt = db.query(models.DietaryRestrictionOption).filter(models.DietaryRestrictionOption.id == option_id).first()
+    if not opt:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Option not found")
+    db.delete(opt)
+    db.commit()
+    return {"message": "Deleted"}
+
+
+# ---------- Feeding preference options (admin-managed list for add-child flow) ----------
+@router.get("/feeding-preference-options", response_model=List[schemas.FeedingPreferenceOptionResponse])
+async def admin_list_feeding_preference_options(
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """List all feeding preference options (admin)."""
+    return (
+        db.query(models.FeedingPreferenceOption)
+        .order_by(models.FeedingPreferenceOption.sort_order.asc(), models.FeedingPreferenceOption.id.asc())
+        .all()
+    )
+
+
+@router.post("/feeding-preference-options", response_model=schemas.FeedingPreferenceOptionResponse)
+async def admin_create_feeding_preference_option(
+    payload: schemas.FeedingPreferenceOptionCreate,
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Add a new feeding preference option (admin)."""
+    opt = models.FeedingPreferenceOption(label=payload.label, sort_order=payload.sort_order or 0)
+    db.add(opt)
+    db.commit()
+    db.refresh(opt)
+    return opt
+
+
+@router.put("/feeding-preference-options/{option_id}", response_model=schemas.FeedingPreferenceOptionResponse)
+async def admin_update_feeding_preference_option(
+    option_id: int,
+    payload: schemas.FeedingPreferenceOptionUpdate,
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Update a feeding preference option (admin)."""
+    opt = db.query(models.FeedingPreferenceOption).filter(models.FeedingPreferenceOption.id == option_id).first()
+    if not opt:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Option not found")
+    if payload.label is not None:
+        opt.label = payload.label
+    if payload.sort_order is not None:
+        opt.sort_order = payload.sort_order
+    db.commit()
+    db.refresh(opt)
+    return opt
+
+
+@router.delete("/feeding-preference-options/{option_id}")
+async def admin_delete_feeding_preference_option(
+    option_id: int,
+    current_user: models.User = Depends(security.get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Delete a feeding preference option (admin)."""
+    opt = db.query(models.FeedingPreferenceOption).filter(models.FeedingPreferenceOption.id == option_id).first()
+    if not opt:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Option not found")
+    db.delete(opt)
+    db.commit()
+    return {"message": "Deleted"}
+
 @router.post("/quizzes", response_model=schemas.QuizResponse)
 async def create_quiz(
     title: str,

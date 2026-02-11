@@ -174,6 +174,42 @@ class FoodAllergyOptionUpdate(BaseModel):
     label: Optional[str] = None
     sort_order: Optional[int] = None
 
+
+# Dietary Restriction Options (admin-managed list for add-child flow)
+class DietaryRestrictionOptionResponse(BaseModel):
+    id: int
+    label: str
+    sort_order: int
+
+    class Config:
+        from_attributes = True
+
+class DietaryRestrictionOptionCreate(BaseModel):
+    label: str
+    sort_order: Optional[int] = 0
+
+class DietaryRestrictionOptionUpdate(BaseModel):
+    label: Optional[str] = None
+    sort_order: Optional[int] = None
+
+
+# Feeding Preference Options (admin-managed list for add-child flow)
+class FeedingPreferenceOptionResponse(BaseModel):
+    id: int
+    label: str
+    sort_order: int
+
+    class Config:
+        from_attributes = True
+
+class FeedingPreferenceOptionCreate(BaseModel):
+    label: str
+    sort_order: Optional[int] = 0
+
+class FeedingPreferenceOptionUpdate(BaseModel):
+    label: Optional[str] = None
+    sort_order: Optional[int] = None
+
 # Token Schema
 class Token(BaseModel):
     access_token: str
