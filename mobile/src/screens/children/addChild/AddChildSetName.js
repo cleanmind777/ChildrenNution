@@ -3,7 +3,8 @@ import { View, StyleSheet, Dimensions, Image } from "react-native";
 import { TextInput, Button, Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useAddChild } from "../../../context/AddChildContext";
-import { LinearGradient } from "expo-linear-gradient";
+import AddChildContentCard from "./AddChildContentCard";
+
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const DESIGN_WIDTH = 440;
 const DESIGN_HEIGHT = 956;
@@ -51,43 +52,29 @@ export default function AddChildSetName() {
           style={[styles.cardBg, { width: CARD_WIDTH, height: CARD_HEIGHT }]}
           resizeMode="stretch"
         />
-
-            {/* Your ORIGINAL LinearGradient goes here */}
-            <View style={styles.inputCardWrapper}>  
-
-              <LinearGradient
-              colors={["rgba(69, 131, 241, 0.6)", "rgba(255, 85, 91, 0.6)"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.cardContentInner}
+        <AddChildContentCard>
+          <View style={styles.cardContentInner}>
+            <Image
+              source={IMG_CHILD}
+              style={styles.childImage}
+              resizeMode="contain"
             />
-              <View style={styles.inputCard}>
-                <Image
-                  source={IMG_CHILD}
-                  style={styles.childImage}
-                  resizeMode="contain"
-                />
-                <Text style={styles.questionText}>
-                  What's your child's name?
-                </Text>
-                <Text style={styles.descriptionText}>
-                  Let’s get to know them!
-                </Text>
-                <TextInput
-                  value={form.name}
-                  onChangeText={(v) => update("name", v)}
-                  mode="outlined"
-                  style={styles.input}
-                  placeholder="Enter name here..."
-                  placeholderTextColor="#6A6A6A"
-                  outlineColor={COLORS.blueDark}
-                  activeOutlineColor={COLORS.blueDark}
-                  theme={{ roundness: 8 }}
-                  contentStyle={styles.inputContent}
-                />
-              </View>
-            </View>
-            {/* </LinearGradient> */}
+            <Text style={styles.questionText}>What's your child's name?</Text>
+            <Text style={styles.descriptionText}>Let’s get to know them!</Text>
+            <TextInput
+              value={form.name}
+              onChangeText={(v) => update("name", v)}
+              mode="outlined"
+              style={styles.input}
+              placeholder="Enter name here..."
+              placeholderTextColor="#6A6A6A"
+              outlineColor={COLORS.blueDark}
+              activeOutlineColor={COLORS.blueDark}
+              theme={{ roundness: 8 }}
+              contentStyle={styles.inputContent}
+            />
+          </View>
+        </AddChildContentCard>
         <Button mode="contained" onPress={handleNext} style={styles.button}>
           Next
         </Button>
@@ -128,38 +115,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
+  cardContentInner: {
+    width: 378 * scaleX,
+    padding: 24,
+    gap: 10,
+  },
   cardBg: {
     position: "absolute",
     top: -32 * scaleY,
     zIndex: -5,
   },
-  cardContentInner: {
-    position:"absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: 10,
-    // height: 339,
-    width: 378 * scaleX,
-    zIndex: -5,
-    filter: "blur(18px)",
-  },
-  inputCardWrapper: {
-    marginTop: 37 * scaleY,
-    position:"relative",
-  },
-  inputCard: {
-    // flex: 1,
-    // alignItems: "center",
-    width: 378 * scaleX,
-    // height: "100%",
-    backgroundColor: COLORS.white,
-    borderRadius: 10,
-    padding: 24,
-    gap: 10,
-  },
-
   childImage: {
     width: 129 * scaleX,
     height: 194 * scaleY,
