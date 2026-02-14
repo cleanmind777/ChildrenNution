@@ -3,7 +3,8 @@ import { View, StyleSheet, Dimensions, Image } from "react-native";
 import { TextInput, Button, Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useAddChild } from "../../../context/AddChildContext";
-import AddChildContentCard from "./AddChildContentCard";
+import AddChildContentCard from "./components/AddChildContentCard";
+import { AddChildContinueButton } from "./components/AddChildContinueButton";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const DESIGN_WIDTH = 440;
@@ -72,12 +73,11 @@ export default function AddChildSetName() {
               activeOutlineColor={COLORS.blueDark}
               theme={{ roundness: 8 }}
               contentStyle={styles.inputContent}
+              textColor="#000000"
             />
           </View>
         </AddChildContentCard>
-        <Button mode="contained" onPress={handleNext} style={styles.button}>
-          Next
-        </Button>
+
         <Snackbar
           visible={!!notification}
           onDismiss={() => setNotification("")}
@@ -85,6 +85,9 @@ export default function AddChildSetName() {
         >
           {notification}
         </Snackbar>
+      </View>
+      <View style={styles.buttonWrapper}>
+        <AddChildContinueButton onPress={handleNext} label="Continue" disabled={!canNext} style={styles.button} />
       </View>
     </View>
   );
@@ -157,5 +160,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     letterSpacing: 0,
+  },
+  buttonWrapper: {
+    position: "absolute",
+    bottom: 32,
+    width: "100%",
+    alignItems: "center",
   },
 });
