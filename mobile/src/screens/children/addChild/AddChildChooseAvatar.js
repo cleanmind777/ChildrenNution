@@ -12,7 +12,6 @@ import { Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useAddChild } from "../../../context/AddChildContext";
-import AddChildContentCard from "./components/AddChildContentCard";
 import { AddChildContinueButton } from "./components/AddChildContinueButton";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -97,54 +96,57 @@ export default function AddChildChooseAvatar() {
           resizeMode="stretch"
         />
 
-          <View style={styles.cardContentInner}>
+        <View style={styles.cardContentInner}>
+          <TouchableOpacity
+            style={styles.avatarWrap}
+            onPress={choosePhoto}
+            activeOpacity={0.8}
+          >
+            {form.avatarUri ? (
+              <Image source={{ uri: form.avatarUri }} style={styles.avatar} />
+            ) : (
+              <Text style={styles.avatarPlaceholder}>Tap to choose photo</Text>
+            )}
+          </TouchableOpacity>
+          <Text style={styles.questionText}>
+            Choose an Avatar for your Child
+          </Text>
+          <Text style={styles.descriptionText}>
+            Select from our predefined avatars or upload your own photo.
+          </Text>
+          <View style={styles.photoButtonsRow}>
             <TouchableOpacity
-              style={styles.avatarWrap}
+              style={styles.takePhotoButtonWrap}
+              onPress={takePhoto}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={TAKE_PHOTO_GRADIENT}
+                start={TAKE_PHOTO_GRADIENT_START}
+                end={TAKE_PHOTO_GRADIENT_END}
+                locations={TAKE_PHOTO_GRADIENT_LOCATIONS}
+                style={[styles.takePhotoButtonGradient, TAKE_PHOTO_SHADOW]}
+              >
+                <Image
+                  source={TAKE_PHOTO}
+                  style={styles.takePhotoButtonImage}
+                />
+                <Text style={styles.takePhotoButtonText}>Take Photo</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.photoButton}
               onPress={choosePhoto}
               activeOpacity={0.8}
             >
-              {form.avatarUri ? (
-                <Image source={{ uri: form.avatarUri }} style={styles.avatar} />
-              ) : (
-                <Text style={styles.avatarPlaceholder}>
-                  Tap to choose photo
-                </Text>
-              )}
+              <Image
+                source={CHOOSE_PHOTO}
+                style={styles.choosePhotoButtonImage}
+              />
+              <Text style={styles.photoButtonText}>Choose Photo</Text>
             </TouchableOpacity>
-            <Text style={styles.questionText}>
-              Choose an Avatar for your Child
-            </Text>
-            <Text style={styles.descriptionText}>
-              Select from our predefined avatars or upload your own photo.
-            </Text>
-            <View style={styles.photoButtonsRow}>
-              <TouchableOpacity
-                style={styles.takePhotoButtonWrap}
-                onPress={takePhoto}
-                activeOpacity={0.85}
-              >
-                <LinearGradient
-                  colors={TAKE_PHOTO_GRADIENT}
-                  start={TAKE_PHOTO_GRADIENT_START}
-                  end={TAKE_PHOTO_GRADIENT_END}
-                  locations={TAKE_PHOTO_GRADIENT_LOCATIONS}
-                  style={[styles.takePhotoButtonGradient, TAKE_PHOTO_SHADOW]}
-                >
-                  <Image source={TAKE_PHOTO} style={styles.takePhotoButtonImage} />
-                  <Text style={styles.takePhotoButtonText}>Take Photo</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.photoButton}
-                onPress={choosePhoto}
-                activeOpacity={0.8}
-              >
-                <Image source={CHOOSE_PHOTO} style={styles.choosePhotoButtonImage} />
-                <Text style={styles.photoButtonText}>Choose Photo</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-
+        </View>
 
         <Snackbar
           visible={!!notification}
