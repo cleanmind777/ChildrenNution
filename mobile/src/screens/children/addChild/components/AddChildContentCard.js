@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     borderRadius: 10,
-    zIndex: -5,
+    zIndex: 0,
     filter: "blur(18px)",
   },
   inputCard: {

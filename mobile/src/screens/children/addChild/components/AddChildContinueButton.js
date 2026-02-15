@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   continueButtonChild: {
     zIndex: 11,
-    bottom: 21.5,
+    bottom: 25,
     width: 143,
     height: 165,
   },

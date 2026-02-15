@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   cardBg: {
     position: "absolute",
     top: -32 * scaleY,
-    zIndex: -5,
+    zIndex: 0,
   },
   childImage: {
     width: 129 * scaleX,

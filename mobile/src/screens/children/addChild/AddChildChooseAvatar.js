@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   cardBg: {
     position: "absolute",
     top: -32 * scaleY,
-    zIndex: -5,
+    zIndex: 0,
   },
   cardContentInner: {
     width: 378 * scaleX,
@@ -229,8 +229,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   photoButtonsRow: {
-    gap: 12,
-    marginTop: 8,
+    gap: 50,
+    // marginTop: 8,
+    flex: 1,
     width: 379 * scaleX,
   },
   takePhotoButtonWrap: {
@@ -244,6 +245,7 @@ const styles = StyleSheet.create({
     gap: 9,
     alignItems: "center",
     justifyContent: "center",
+    height: 44,
   },
   takePhotoButtonText: {
     fontFamily: "Futura PT",
@@ -262,6 +264,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 9,
+    height: 44,
+    // top: 8 * scaleY,
   },
   photoButtonText: {
     fontFamily: "Futura PT",

@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   cardBg: {
     position: "absolute",
     top: -32 * scaleY,
-    zIndex: -5,
+    zIndex: 0,
   },
   childImage: {
     width: 129 * scaleX,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   questionText: {
-    top: 8,
+    top: 8 * scaleY,
     fontFamily: "Futura PT",
     fontWeight: "500",
     fontStyle: "normal",
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     color: "#6A6A6A",
     textAlign: "center",
-    top: 5,
+    top: 10 * scaleY,
   },
   buttonWrapper: {
     position: "absolute",
