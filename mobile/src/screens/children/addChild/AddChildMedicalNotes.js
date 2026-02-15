@@ -17,9 +17,22 @@ export default function AddChildMedicalNotes() {
       setError('Please enter the child\'s name');
       return;
     }
-    const ageNum = parseInt(form.age, 10);
-    if (isNaN(ageNum) || ageNum < 1 || ageNum > 18) {
-      setError('Age must be between 1 and 18');
+    const birthdayStr = (form.birthday || '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(birthdayStr)) {
+      setError('Please enter a valid birthday (YYYY-MM-DD)');
+      return;
+    }
+    const [y, m, d] = birthdayStr.split('-').map(Number);
+    const birthDate = new Date(y, m - 1, d);
+    if (isNaN(birthDate.getTime()) || birthDate.getFullYear() !== y || birthDate.getMonth() !== m - 1 || birthDate.getDate() !== d) {
+      setError('Please enter a valid birthday (YYYY-MM-DD)');
+      return;
+    }
+    let age = new Date().getFullYear() - birthDate.getFullYear();
+    const monthDiff = new Date().getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && new Date().getDate() < birthDate.getDate())) age--;
+    if (age < 1 || age > 18) {
+      setError('Child\'s age must be between 1 and 18 years');
       return;
     }
 
@@ -30,7 +43,7 @@ export default function AddChildMedicalNotes() {
     try {
       const payload = {
         name: form.name.trim(),
-        age: ageNum,
+        birthday: birthdayStr,
         sex: form.gender,
         food_allergies: Array.isArray(form.foodAllergies) ? form.foodAllergies.join(', ') || null : form.foodAllergies || null,
         dietary_restrictions: Array.isArray(form.dietaryRestrictions) ? form.dietaryRestrictions.join(', ') || null : form.dietaryRestrictions || null,

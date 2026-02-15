@@ -12,7 +12,7 @@ const initial = {
   name: '',
   gender: 'male',
   avatarUri: null,
-  age: '',
+  birthday: '', // YYYY-MM-DD
   foodAllergies: [],
   dietaryRestrictions: [],
   feedingPreferences: [],

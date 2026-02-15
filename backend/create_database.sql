@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS children (
   id SERIAL PRIMARY KEY,
   parent_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   name VARCHAR NOT NULL,
-  age INTEGER NOT NULL,
+  birthday DATE NOT NULL,
   sex gender NOT NULL,
   food_allergies TEXT,
   dietary_restrictions TEXT,

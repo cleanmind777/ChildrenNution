@@ -1,6 +1,6 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, computed_field
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, date
 from app.models import MealType, Gender, ActivityType
 
 # User Schemas
@@ -29,9 +29,15 @@ class VerificationCodeVerify(BaseModel):
     code: str
 
 # Child Schemas
+def _age_from_birthday(b: date) -> int:
+    today = date.today()
+    age = today.year - b.year - ((today.month, today.day) < (b.month, b.day))
+    return max(0, age)
+
+
 class ChildCreate(BaseModel):
     name: str
-    age: int = Field(..., gt=0, le=18)
+    birthday: date
     sex: Gender
     food_allergies: Optional[str] = None
     dietary_restrictions: Optional[str] = None
@@ -40,7 +46,7 @@ class ChildCreate(BaseModel):
 
 class ChildUpdate(BaseModel):
     name: Optional[str] = None
-    age: Optional[int] = Field(None, gt=0, le=18)
+    birthday: Optional[date] = None
     sex: Optional[Gender] = None
     food_allergies: Optional[str] = None
     dietary_restrictions: Optional[str] = None
@@ -51,14 +57,19 @@ class ChildResponse(BaseModel):
     id: int
     parent_id: int
     name: str
-    age: int
+    birthday: date
     sex: Gender
     food_allergies: Optional[str]
     dietary_restrictions: Optional[str]
     feeding_preferences: Optional[str]
     medical_notes: Optional[str]
     created_at: datetime
-    
+
+    @computed_field
+    @property
+    def age(self) -> int:
+        return _age_from_birthday(self.birthday)
+
     class Config:
         from_attributes = True
 

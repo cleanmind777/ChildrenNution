@@ -6,7 +6,7 @@ import api from '../../config/api';
 
 export default function AddChildScreen() {
   const [name, setName] = useState('');
-  const [age, setAge] = useState('');
+  const [birthday, setBirthday] = useState('');
   const [sex, setSex] = useState('male');
   const [foodAllergies, setFoodAllergies] = useState('');
   const [dietaryRestrictions, setDietaryRestrictions] = useState('');
@@ -16,14 +16,25 @@ export default function AddChildScreen() {
   const navigation = useNavigation();
 
   const handleSave = async () => {
-    if (!name || !age) {
-      setError('Please fill in name and age');
+    if (!name || !birthday) {
+      setError('Please fill in name and birthday (YYYY-MM-DD)');
       return;
     }
-
-    const ageNum = parseInt(age);
-    if (isNaN(ageNum) || ageNum < 1 || ageNum > 18) {
-      setError('Age must be between 1 and 18');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(birthday.trim())) {
+      setError('Birthday must be YYYY-MM-DD');
+      return;
+    }
+    const [y, m, d] = birthday.trim().split('-').map(Number);
+    const birthDate = new Date(y, m - 1, d);
+    if (isNaN(birthDate.getTime()) || birthDate.getFullYear() !== y || birthDate.getMonth() !== m - 1 || birthDate.getDate() !== d) {
+      setError('Please enter a valid birthday (YYYY-MM-DD)');
+      return;
+    }
+    let age = new Date().getFullYear() - birthDate.getFullYear();
+    const monthDiff = new Date().getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && new Date().getDate() < birthDate.getDate())) age--;
+    if (age < 1 || age > 18) {
+      setError('Child\'s age must be between 1 and 18 years');
       return;
     }
 
@@ -33,7 +44,7 @@ export default function AddChildScreen() {
     try {
       await api.post('/api/children/', {
         name,
-        age: ageNum,
+        birthday: birthday.trim(),
         sex,
         food_allergies: foodAllergies || null,
         dietary_restrictions: dietaryRestrictions || null,
@@ -64,12 +75,12 @@ export default function AddChildScreen() {
           />
 
           <TextInput
-            label="Age *"
-            value={age}
-            onChangeText={setAge}
+            label="Birthday (YYYY-MM-DD) *"
+            value={birthday}
+            onChangeText={setBirthday}
             mode="outlined"
-            keyboardType="number-pad"
             style={styles.input}
+            placeholder="e.g. 2018-05-15"
           />
 
           <Text variant="bodyMedium" style={styles.label}>

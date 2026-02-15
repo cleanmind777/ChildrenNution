@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text, Float, Enum
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date, ForeignKey, Text, Float, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -40,11 +40,11 @@ class User(Base):
 
 class Child(Base):
     __tablename__ = "children"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     parent_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
+    birthday = Column(Date, nullable=False)
     sex = Column(Enum(Gender, values_callable=_enum_values), nullable=False)
     food_allergies = Column(Text, nullable=True)  # JSON string or comma-separated
     dietary_restrictions = Column(Text, nullable=True)  # JSON string or comma-separated
