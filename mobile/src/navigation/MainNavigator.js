@@ -42,7 +42,7 @@ function ChildrenStack() {
       <Stack.Screen 
         name="MealSelection" 
         component={MealSelectionScreen}
-        options={{ title: 'Select Meal' }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen 
         name="Activity" 
