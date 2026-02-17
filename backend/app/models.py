@@ -46,6 +46,7 @@ class Child(Base):
     name = Column(String, nullable=False)
     birthday = Column(Date, nullable=False)
     sex = Column(Enum(Gender, values_callable=_enum_values), nullable=False)
+    avatar_url = Column(String, nullable=True)
     food_allergies = Column(Text, nullable=True)  # JSON string or comma-separated
     dietary_restrictions = Column(Text, nullable=True)  # JSON string or comma-separated
     feeding_preferences = Column(Text, nullable=True)  # JSON string

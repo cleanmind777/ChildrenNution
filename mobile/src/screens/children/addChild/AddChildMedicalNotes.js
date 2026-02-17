@@ -4,7 +4,7 @@ import { TextInput, Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import api from "../../../config/api";
 import { useAddChild } from "../../../context/AddChildContext";
-import AddChildContentCard from "./components/AddChildContentCard";
+import AddChildContentCard from "../../../components/AddChildContentCard";
 import { AddChildContinueButton } from "./components/AddChildContinueButton";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -73,10 +73,24 @@ export default function AddChildMedicalNotes() {
     update("medicalNotes", notes);
 
     try {
+      let avatarUrl = null;
+      if (form.avatarUri) {
+        const formData = new FormData();
+        formData.append("file", {
+          uri: form.avatarUri,
+          type: "image/jpeg",
+          name: "avatar.jpg",
+        });
+        const uploadRes = await api.post("/api/children/upload-avatar", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        avatarUrl = uploadRes.data?.avatar_url || null;
+      }
       const payload = {
         name: form.name.trim(),
         birthday: birthdayStr,
         sex: form.gender,
+        avatar_url: avatarUrl,
         food_allergies: Array.isArray(form.foodAllergies)
           ? form.foodAllergies.join(", ") || null
           : form.foodAllergies || null,
@@ -164,7 +178,6 @@ const styles = StyleSheet.create({
   },
   cardContentInner: {
     width: 378 * scaleX,
-    height: 615 * scaleY,
     padding: 15,
     gap: 10,
   },

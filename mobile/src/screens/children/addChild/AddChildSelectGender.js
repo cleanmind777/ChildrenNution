@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-nat
 import { TextInput, Button, Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useAddChild } from "../../../context/AddChildContext";
-import AddChildContentCard from "./components/AddChildContentCard";
+import AddChildContentCard from "../../../components/AddChildContentCard";
 import { AddChildContinueButton } from "./components/AddChildContinueButton";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");

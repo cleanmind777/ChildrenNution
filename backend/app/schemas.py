@@ -39,6 +39,7 @@ class ChildCreate(BaseModel):
     name: str
     birthday: date
     sex: Gender
+    avatar_url: Optional[str] = None
     food_allergies: Optional[str] = None
     dietary_restrictions: Optional[str] = None
     feeding_preferences: Optional[str] = None
@@ -48,6 +49,7 @@ class ChildUpdate(BaseModel):
     name: Optional[str] = None
     birthday: Optional[date] = None
     sex: Optional[Gender] = None
+    avatar_url: Optional[str] = None
     food_allergies: Optional[str] = None
     dietary_restrictions: Optional[str] = None
     feeding_preferences: Optional[str] = None
@@ -59,6 +61,7 @@ class ChildResponse(BaseModel):
     name: str
     birthday: date
     sex: Gender
+    avatar_url: Optional[str] = None
     food_allergies: Optional[str]
     dietary_restrictions: Optional[str]
     feeding_preferences: Optional[str]

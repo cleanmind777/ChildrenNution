@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { Card, Text, Button, FAB, ActivityIndicator } from 'react-native-paper';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { Card, Text, FAB, ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../../config/api';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+const LAST_SEEN_CHILD_ID_KEY = 'last_seen_child_id';
 
 export default function ChildrenListScreen() {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
+  const hasNavigatedToLastSeen = useRef(false);
+
   useEffect(() => {
     loadChildren();
-    
     const unsubscribe = navigation.addListener('focus', () => {
       loadChildren();
     });
-
     return unsubscribe;
   }, [navigation]);
 
@@ -24,7 +27,20 @@ export default function ChildrenListScreen() {
     try {
       setLoading(true);
       const response = await api.get('/api/children/');
-      setChildren(response.data);
+      const list = response.data;
+      setChildren(list);
+
+      // After login: navigate to last seen child profile if we have one
+      if (!hasNavigatedToLastSeen.current && list.length > 0) {
+        const lastId = await AsyncStorage.getItem(LAST_SEEN_CHILD_ID_KEY);
+        if (lastId) {
+          const exists = list.some((c) => String(c.id) === String(lastId));
+          if (exists) {
+            hasNavigatedToLastSeen.current = true;
+            navigation.navigate('ChildProfile', { childId: lastId });
+          }
+        }
+      }
     } catch (error) {
       console.error('Error loading children:', error);
     } finally {
@@ -33,7 +49,34 @@ export default function ChildrenListScreen() {
   };
 
   const handleSelectChild = (child) => {
-    navigation.navigate('MealSelection', { child });
+    navigation.navigate('ChildProfile', { childId: child.id });
+  };
+
+  const handleDeleteChild = (child) => {
+    Alert.alert(
+      'Delete profile',
+      `Are you sure you want to delete ${child.name}'s profile? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await api.delete(`/api/children/${child.id}`);
+              setChildren((prev) => prev.filter((c) => c.id !== child.id));
+              const lastId = await AsyncStorage.getItem(LAST_SEEN_CHILD_ID_KEY);
+              if (lastId && String(child.id) === String(lastId)) {
+                await AsyncStorage.removeItem(LAST_SEEN_CHILD_ID_KEY);
+              }
+            } catch (error) {
+              console.error('Error deleting child:', error);
+              Alert.alert('Error', error.response?.data?.detail || 'Failed to delete profile');
+            }
+          },
+        },
+      ]
+    );
   };
 
   if (loading) {
@@ -71,16 +114,29 @@ export default function ChildrenListScreen() {
         data={children}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Card style={styles.card} onPress={() => handleSelectChild(item)}>
+          <Card style={styles.card}>
             <Card.Content>
               <View style={styles.cardHeader}>
-                <View>
+                <TouchableOpacity
+                  style={styles.cardTitleWrap}
+                  onPress={() => handleSelectChild(item)}
+                  activeOpacity={0.7}
+                >
                   <Text variant="titleLarge">{item.name}</Text>
                   <Text variant="bodyMedium" style={styles.ageText}>
                     Age: {item.age} • {item.sex}
                   </Text>
+                </TouchableOpacity>
+                <View style={styles.cardActions}>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteChild(item)}
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                    style={styles.deleteButton}
+                  >
+                    <MaterialCommunityIcons name="delete-outline" size={24} color="#c62828" />
+                  </TouchableOpacity>
+                  <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
                 </View>
-                <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
               </View>
             </Card.Content>
           </Card>
@@ -116,6 +172,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  cardTitleWrap: {
+    flex: 1,
+  },
+  cardActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  deleteButton: {
+    padding: 4,
   },
   ageText: {
     color: '#666',

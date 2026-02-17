@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, Image, ScrollView } from "react-native";
 import { Text, Snackbar, TextInput, Switch } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useAddChild } from "../../../context/AddChildContext";
-import AddChildContentCard from "./components/AddChildContentCard";
+import AddChildContentCard from "../../../components/AddChildContentCard";
 import { AddChildContinueButton } from "./components/AddChildContinueButton";
 import api from "../../../config/api";
 

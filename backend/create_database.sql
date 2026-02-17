@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS children (
   name VARCHAR NOT NULL,
   birthday DATE NOT NULL,
   sex gender NOT NULL,
+  avatar_url VARCHAR,
   food_allergies TEXT,
   dietary_restrictions TEXT,
   feeding_preferences TEXT,

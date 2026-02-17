@@ -36,6 +36,7 @@ const COLORS = {
 const IMG_RECTANGLE = require("../../../../assets/pic/addChild/rectangle1.png");
 const TAKE_PHOTO = require("../../../../assets/pic/addChild/take_photo.png");
 const CHOOSE_PHOTO = require("../../../../assets/pic/addChild/choose_photo.png");
+const DEFAULT_AVATAR = require("../../../../assets/pic/addChild/select_gender.png");
 
 // Take Photo button: linear-gradient(279.92deg, #0446C2 7.96%, #3F66C6 89.7%); box-shadow: 0px 4px 12.8px 0px #1049BA3D
 const TAKE_PHOTO_GRADIENT = ["#0446C2", "#3F66C6"];
@@ -105,7 +106,7 @@ export default function AddChildChooseAvatar() {
             {form.avatarUri ? (
               <Image source={{ uri: form.avatarUri }} style={styles.avatar} />
             ) : (
-              <Text style={styles.avatarPlaceholder}>Tap to choose photo</Text>
+              <Image source={DEFAULT_AVATAR} style={styles.avatar} />
             )}
           </TouchableOpacity>
           <Text style={styles.questionText}>

@@ -11,7 +11,7 @@ import { Text, Snackbar } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import { useAddChild } from "../../../context/AddChildContext";
-import AddChildContentCard from "./components/AddChildContentCard";
+import AddChildContentCard from "../../../components/AddChildContentCard";
 import { AddChildContinueButton } from "./components/AddChildContinueButton";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -58,6 +58,7 @@ const COLORS = {
 };
 
 const IMG_RECTANGLE = require("../../../../assets/pic/addChild/rectangle1.png");
+const DEFAULT_AVATAR = require("../../../../assets/pic/addChild/select_gender.png");
 
 export default function AddChildInputAge() {
   const navigation = useNavigation();
@@ -114,7 +115,7 @@ export default function AddChildInputAge() {
               {form.avatarUri ? (
                 <Image source={{ uri: form.avatarUri }} style={styles.avatar} />
               ) : (
-                <Text style={styles.avatarPlaceholder}>No photo chosen</Text>
+                <Image source={DEFAULT_AVATAR} style={styles.avatar} />
               )}
             </View>
             <Text style={styles.questionText}>How old is your child?</Text>

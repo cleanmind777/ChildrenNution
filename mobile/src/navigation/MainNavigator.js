@@ -16,6 +16,7 @@ import NutritionScreen from '../screens/meals/NutritionScreen';
 import MealLogScreen from '../screens/meals/MealLogScreen';
 import CoinsScreen from '../screens/coins/CoinsScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import ProgressScreen from '../screens/progress/ProgressScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,7 +32,7 @@ function ChildrenStack() {
       <Stack.Screen 
         name="ChildProfile" 
         component={ChildProfileScreen}
-        options={{ title: 'Child Profile' }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen 
         name="AddChild" 
@@ -73,6 +74,11 @@ function ChildrenStack() {
         component={MealLogScreen}
         options={{ title: 'Log Meal' }}
       />
+      <Stack.Screen 
+        name="Progress" 
+        component={ProgressScreen}
+        options={{ title: 'View Progress' }}
+      />
     </Stack.Navigator>
   );
 }
@@ -86,9 +92,10 @@ function MainTabs() {
       }}
     >
       <Tab.Screen
-        name="Children"
+        name="ChildProfileTab"
         component={ChildrenStack}
         options={{
+          title: 'Child Profile',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-child" size={size} color={color} />
           ),

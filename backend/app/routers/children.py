@@ -1,10 +1,33 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List
+import os
+import shutil
+from datetime import datetime
 from app.database import get_db
 from app import models, schemas, security
 
 router = APIRouter(prefix="/api/children", tags=["children"])
+
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", "./uploads")
+AVATAR_SUBDIR = "avatars"
+os.makedirs(os.path.join(UPLOAD_DIR, AVATAR_SUBDIR), exist_ok=True)
+
+
+@router.post("/upload-avatar")
+async def upload_child_avatar(
+    file: UploadFile = File(...),
+    current_user: models.User = Depends(security.get_current_active_user)
+):
+    """Upload child avatar image. Returns avatar_url path for use in create/update child."""
+    ext = os.path.splitext(file.filename or "image")[1] or ".jpg"
+    filename = f"{datetime.now().timestamp():.0f}_{current_user.id}{ext}"
+    dir_path = os.path.join(UPLOAD_DIR, AVATAR_SUBDIR)
+    file_path = os.path.join(dir_path, filename)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    avatar_url = f"/uploads/{AVATAR_SUBDIR}/{filename}"
+    return {"avatar_url": avatar_url}
 
 @router.post("/", response_model=schemas.ChildResponse)
 async def create_child(

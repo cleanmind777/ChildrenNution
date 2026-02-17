@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   backgroundSvgWrap: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: -10,
+    zIndex: 0,
     overflow: "hidden",
   },
   backgroundSvg: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   bottomBackground: {
-    zIndex: -5,
+    zIndex: 0,
     position: "absolute",
     top: 0,
     left: 0,
